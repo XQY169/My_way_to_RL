@@ -1,0 +1,8 @@
+state_size:3
+action_size:1
+neu_size:512
+device:cpu
+lr:0.0001
+gamma:0.99
+alpha:0.0
+batch_size:200
