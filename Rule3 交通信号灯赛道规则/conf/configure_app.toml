@@ -1,0 +1,117 @@
+[app]
+# 下面的项目是每个app要单独配置的
+app = "intelligent_traffic_lights"
+self_play = false
+set_name = "intelligent_traffic_lights_set111"
+self_play_set_name = "intelligent_traffic_lights_set111"
+selfplay_app_conf = "conf/nature_app_intelligent_traffic_lights.yaml"
+noselfplay_app_conf = "conf/nature_app_intelligent_traffic_lights.yaml"
+algo_conf = "conf/nature_algo_intelligent_traffic_lights.yaml"
+rainbow_env_name = "intelligent_traffic_lights_dev"
+
+# 下面的是公共配置, 按需修改
+run_mode = "train"
+# 下面是日志文件相关配置
+log_dir = "/data/projects/intelligent_traffic_lights/log"
+level = "INFO"
+tensorflow_log_level = "INFO"
+
+# 采用的算法
+algo = "target_dqn"
+
+# learner/actor之间同步model文件的时间间隔, 建议是偶数倍
+model_file_sync_per_minutes = 2
+
+# actor加载model文件的时间间隔, 建议是奇数倍
+model_file_load_per_minutes = 3
+
+# torch使用时默认的线程数目, 针对单机限制CPU使用很重要
+torch_num_threads = 1
+
+# actor预测批处理大小
+predict_batch_size = 1
+
+# aisrv在单局里多次发送样本大小配置
+send_sample_size = 1
+
+# IP
+aisvr_ip = "127.0.0.1"
+# 端口
+aisvr_port = 8000
+
+# 使用的强化学习框架, 包括tensorflow_simple, tensorflow_complex, tensorrt, pytorch等, 默认是tensorflow_simple
+use_which_deep_learning_framework = "pytorch"
+
+# 训练时采用on-policy, off-policy
+algorithm_on_policy_or_off_policy = "off-policy"
+# 如果是on-policy, 支持的类型step(aisrv角度每帧), episode(aisrv角度每局), time_interval(learner角度多帧)
+on_policy_by_way = "step"
+# 如果是on-policy, 最大的超时时间间隔, 建议设置小些多次少量
+on_policy_timeout_seconds = 5
+# 如果是on-policy, 设置达到多少比例即开始执行, 主要是站在aisrv主进程的角度看aisrvhandler进程, 站在learner的角度看aisrv进程, 默认为1, 按照需要设置
+on_policy_quantity_ratio = 1
+
+# 如果采用特征值处理的库是其他的插件, 则需要配置下, 否则忽略该配置项
+feature_process_lib_interface_configure = "environment/feature_process/config.dat"
+
+# 预测是放在actor远程还是aisrv本地, 小规模场景建议是aisrv本地local模式, 大规模场景和小规模场景都可以使用的actor远程remote模式
+predict_local_or_remote = "local"
+
+# 接入采用标准化模式
+framework_integration_patterns = "standard"
+
+# 采用接入KaiwuEnv方式
+aisrv_framework = "kaiwu_env"
+
+# 采用的wrapper形式, 包括remote, local, none
+wrapper_type = "remote"
+
+# 在模型文件保存时, 需要保存的文件目录, 多个目录请按照逗号分割, 并且是以项目根目录开始看的
+copy_dir = "conf,target_dqn,diy,dqn"
+
+# 单个样本使用的次数
+reverb_num_samples = 1
+
+# 设置actor和learner地址
+actor_addrs = { train_one = ["127.0.0.1:8888"]}
+learner_addrs = {train_one = ["127.0.0.1:9999"]}
+
+# === === === === === === === === === === === === === === === === === === === ===
+# 下面的配置使用者可以按照需要修改
+# === === === === === === === === === === === === === === === === === === === ===
+
+# learner执行while True循环的进行训练，设置休息时间以便设置样本生产消耗比
+learner_train_by_while_true = true
+learner_train_sleep_seconds = 0.1
+
+# 下面是replay buffer的相关配置
+replay_buffer_capacity = 4096
+preload_ratio = 20
+
+# pytorch训练间隔多少步输出model文件
+dump_model_freq = 100
+
+# learner上reverb样本的输入维度, 注意不同的算法维度不一样, 比如wtsl的维度是2638
+sample_dim = 1176
+
+# 评估模式模型文件夹路径和ID
+
+# 预加载模型文件夹路径和ID
+preload_model = false
+preload_model_dir = "/data/ckpt/intelligent_traffic_lights_target_dqn/"
+preload_model_id = 1000
+
+# learner训练批处理大小限制
+train_batch_size = 256
+# 样本消耗/生成采样比
+production_consume_ratio = 10
+
+# reverb移除策略, 可选项是reverb.selectors.Lifo, reverb.selectors.Prioritized, reverb.selectors.Fifo
+reverb_remover = "reverb.selectors.Fifo"
+# reverb采样策略, 可选项是reverb.selectors.Prioritized, reverb.selectors.Fifo, reverb.selectors.Uniform
+reverb_sampler = "reverb.selectors.Uniform"
+
+# model文件FIFO的个数, 如果是采用最新的模型则设置为1; 需要采用历史模型则该值设置为需要的比如50, FIFO模式
+modelpool_max_save_model_count = 1
+eval_model_dir = "/data/projects/intelligent_traffic_lights/ckpt"
+eval_model_id = "0"
