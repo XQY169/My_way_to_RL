@@ -57,18 +57,7 @@ class Actor(nn.Module):
         u = np.arctanh(action/2.0)
         return dist.log_prob(u)
 
-class attention_net(nn.Module):
-    def __init__(self, state_size, neu_size):
-        super(attention_net, self).__init__()
-        self.fc1 = nn.Linear(state_size, neu_size)
-        self.fc2 = nn.Linear(neu_size, neu_size)
-        self.fc3 = nn.Linear(neu_size, state_size)
 
-    def forward(self, state):
-        x = torch.relu(self.fc1(state))
-        x = torch.relu(self.fc2(x))
-        attention = (torch.tanh(self.fc3(x)) + 1)/2.0
-        return attention
 
 class Critic(nn.Module):
     def __init__(self, state_size, action_size, neu_size,):
@@ -143,8 +132,7 @@ class SAC():
         self.maxaction = 2.0;
         self.actor = Actor(self.state_size,self.action_size,self.neu_size,mode = 1).to(self.device);
         self.actor_optimizer = torch.optim.Adam(self.actor.parameters(),lr = self.lr);
-        # self.attention = attention_net(self.state_size,self.neu_size).to(self.device)
-        # self.attention_optimizer = torch.optim.Adam(self.attention_net.parameters(),lr = self.lr)
+
         self.critic = Critic(self.state_size,self.action_size,self.neu_size).to(self.device);
         self.critic_optimizer = torch.optim.Adam(self.critic.parameters(),lr = self.lr);
         self.critic_target = copy.deepcopy(self.critic);
