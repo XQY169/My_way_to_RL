@@ -1,0 +1,9 @@
+intelligent_traffic_lights:
+    run_handler: environment.traffic_run_handler.TrafficRunHandler
+    rl_helper: kaiwudrl.server.aisrv.kaiwu_rl_helper_standard.KaiWuRLStandardHelper
+    policies:
+        train_one:
+            policy_builder: kaiwudrl.server.aisrv.async_policy.AsyncBuilder
+            algo: target_dqn
+            state: conf.intelligent_traffic_lights_state.TrafficState
+            action: conf.intelligent_traffic_lights_action.TrafficAction
